@@ -23,13 +23,13 @@ public class TicketView implements BaseTicketView {
             System.out.println("Choose an operation:");
             System.out.println("1. Create Ticket");
             System.out.println("2. Get All Tickets");
-            System.out.println("3. Get Tickets of Status");
+            System.out.println("3. Get Ticket Status");
             System.out.println("4. Update Ticket");
             System.out.println("5. Delete Ticket");
             System.out.println("6. Exit");
             System.out.println();
 
-            int choice = scanner.nextInt();
+            int choice = getValidChoice();
             scanner.nextLine(); // Consume the newline character
 
             switch (choice) {
@@ -53,7 +53,18 @@ public class TicketView implements BaseTicketView {
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
 
+    private int getValidChoice() {
+        while (true) {
+            try {
+                return scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid choice.");
+                System.out.println();
+                scanner.nextLine(); // Consume the invalid input
             }
         }
     }
