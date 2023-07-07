@@ -84,6 +84,7 @@ public void createTicket() {
     String description = scanner.nextLine();
 
     String selectedStatus = displayMenuAndGetStatus();
+    Scanner scanner = new Scanner(System.in);
     System.out.println("Enter ticket priority level: ");
     String priority = scanner.nextLine();
 
@@ -124,7 +125,17 @@ public void createTicket() {
 
     @Override
     public void getAllTickets() {
-        
+        ticketList = ticketServiceImpl.getAllTickets();
+        for (Ticket ticket : ticketList) {
+        System.out.println("Ticket ID: " + ticket.getTicketId());
+        System.out.println("Customer Name: " + ticket.getCustomerName());
+        System.out.println("Contact Information: " + ticket.getContactInfo());
+        System.out.println("Ticket Category: " + ticket.getTicketCategory());
+        System.out.println("Description: " + ticket.getDescription());
+        System.out.println("Ticket Status: " + ticket.getStatus());
+        System.out.println("Priority: " + ticket.getPriority());
+        System.out.println();
+       }
     }
 
     @Override
