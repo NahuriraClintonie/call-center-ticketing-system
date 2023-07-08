@@ -186,6 +186,51 @@ System.out.println("Invalid status choice.");
 
     @Override
     public void updateTicket() {
+        // Display the available ticket IDs for selection
+      System.out.println("Available ticket IDs:");
+      List<Ticket> ticketList = ticketServiceImpl.getAllTickets();
+      for (Ticket ticket : ticketList) {
+           System.out.println(ticket.getTicketId());
+    }
+
+    // Prompt the user to enter the ticket ID to be updated
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Enter the ticket ID to update: ");
+    String ticketId = scanner.nextLine();
+
+    // Find the ticket in the ticketList based on the provided ticket ID
+    Ticket selectedTicket = null;
+    for (Ticket ticket : ticketList) {
+        if (ticket.getTicketId().equals(ticketId)) {
+            selectedTicket = ticket;
+            break;
+       }
+    }
+
+    // Check if the ticket is found
+    if (selectedTicket != null) {
+    // Prompt the user to enter updated ticket details
+         System.out.println("Enter updated customer name: ");
+         String customerName = scanner.nextLine();
+         System.out.println("Enter updated contact information: ");
+         String contactInfo = scanner.nextLine();
+         System.out.println("Enter updated ticket category: ");
+         String ticketCategory = scanner.nextLine();
+         System.out.println("Enter updated description: ");
+         String description = scanner.nextLine();
+         System.out.println("Enter updated status: ");
+         String status = scanner.nextLine();
+         System.out.println("Enter updated priority: ");
+         String priority = scanner.nextLine();
+
+         // Create an updated ticket object
+        Ticket updatedTicket = new Ticket(ticketId,customerName, contactInfo, ticketCategory, description, status, priority);
+
+         // Call the updateTicket method in the service layer to update the ticket
+         ticketServiceImpl.updateTicket(updatedTicket);
+         } else {
+              System.out.println("Ticket not found.");
+          }
 
     }
     
