@@ -67,35 +67,50 @@ public class TicketView implements BaseTicketView {
     }
 
     @Override
-public void createTicket() {
-    // Prompt the agent to enter ticket details
-    String ticketId;
-
+    public void createTicket() {
+        // Prompt the agent to enter ticket details
+        String ticketId;
+    
         System.out.println("Enter the ticket ID: ");
         ticketId = scanner.nextLine();
-
-    System.out.println("Enter customer name: ");
-    String customerName = scanner.nextLine();
-    System.out.println("Enter contact information: ");
-    String contactInfo = scanner.nextLine();
-    System.out.println("Enter ticket category: ");
-    String ticketCategory = scanner.nextLine();
-    System.out.println("Enter brief description: ");
-    String description = scanner.nextLine();
-
-    String selectedStatus = displayMenuAndGetStatus();
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Enter ticket priority level: ");
-    String priority = scanner.nextLine();
-
-    // Create a new ticket object
-    Ticket newTicket = new Ticket(ticketId, customerName, contactInfo, ticketCategory, description, selectedStatus, priority);
-
-    // Display success message
-    System.out.println("Ticket created successfully!");
-    System.out.println("\n");
-    ticketServiceImpl.createTicket(newTicket);
-}
+    
+        // Check if the ticket ID already exists in the ticketList
+        if (isTicketIdExists(ticketId)) {
+            System.out.println("Ticket ID already exists. Please enter a unique ticket ID.");
+            return;
+        }
+    
+        System.out.println("Enter customer name: ");
+        String customerName = scanner.nextLine();
+        System.out.println("Enter contact information: ");
+        String contactInfo = scanner.nextLine();
+        System.out.println("Enter ticket category: ");
+        String ticketCategory = scanner.nextLine();
+        System.out.println("Enter brief description: ");
+        String description = scanner.nextLine();
+    
+        String selectedStatus = displayMenuAndGetStatus();
+        System.out.println("Enter ticket priority level: ");
+        String priority = scanner.nextLine();
+    
+        // Create a new ticket object
+        Ticket newTicket = new Ticket(ticketId, customerName, contactInfo, ticketCategory, description, selectedStatus, priority);
+    
+        // Display success message
+        System.out.println("Ticket created successfully!");
+        System.out.println("\n");
+        ticketServiceImpl.createTicket(newTicket);
+    }
+    
+    private boolean isTicketIdExists(String ticketId) {
+        ticketList = ticketServiceImpl.getAllTickets();
+        for (Ticket ticket : ticketList) {
+            if (ticket.getTicketId().equals(ticketId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private int getValidChoice() {
         while (true) {
