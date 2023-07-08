@@ -155,42 +155,122 @@ public class TicketView implements BaseTicketView {
 
     @Override
     public void getTicketsOfStatus() {
-List<Ticket> filteredTickets;
-Scanner scanner = new Scanner(System.in);
-// Prompt the user to choose a status from the menu
-System.out.println("Choose a status to filter tickets:");
-TicketStatus[] statusValues = TicketStatus.values();
-for (int i = 0; i < statusValues.length; i++) {
-System.out.println((i + 1) + ". " + statusValues[i]);
-}
-int statusChoice = scanner.nextInt();
-// Check if the status choice is within the valid range
-if (statusChoice >= 1 && statusChoice <= statusValues.length) {
-TicketStatus chosenStatus = statusValues[statusChoice - 1];
-// Filter tickets by the chosen status using TicketServiceImpl
-// TicketServiceImpl ticketService = new TicketServiceImpl();
-filteredTickets = ticketServiceImpl.getTicketsOfStatus(chosenStatus);
-// Print the filtered tickets
-for (Ticket ticket : filteredTickets) {
-System.out.println("Customer Name: " + ticket.getCustomerName());
-System.out.println("Contact Information: " + ticket.getContactInfo());
-System.out.println("Ticket Category: " + ticket.getTicketCategory());
-System.out.println("Description: " + ticket.getDescription());
-System.out.println("Status: " + ticket.getStatus());
-System.out.println();
-}
-} else {
-System.out.println("Invalid status choice.");
-}
-}
-
-    @Override
-    public void updateTicket() {
-
+       List<Ticket> filteredTickets;
+       Scanner scanner = new Scanner(System.in);
+       // Prompt the user to choose a status from the menu
+       System.out.println("Choose a status to filter tickets:");
+       TicketStatus[] statusValues = TicketStatus.values();
+      for (int i = 0; i < statusValues.length; i++) {
+            System.out.println((i + 1) + ". " + statusValues[i]);
+      }
+       int statusChoice = scanner.nextInt();
+        // Check if the status choice is within the valid range
+       if (statusChoice >= 1 && statusChoice <= statusValues.length) {
+            TicketStatus chosenStatus = statusValues[statusChoice - 1];
+         // Filter tickets by the chosen status using TicketServiceImpl
+        // TicketServiceImpl ticketService = new TicketServiceImpl();
+         filteredTickets = ticketServiceImpl.getTicketsOfStatus(chosenStatus);
+        // Print the filtered tickets
+        for (Ticket ticket : filteredTickets) {
+            System.out.println("Customer Name: " + ticket.getCustomerName());
+            System.out.println("Contact Information: " + ticket.getContactInfo());
+            System.out.println("Ticket Category: " + ticket.getTicketCategory());
+            System.out.println("Description: " + ticket.getDescription());
+            System.out.println("Status: " + ticket.getStatus());
+            System.out.println();
+       }
+         } else {
+       System.out.println("Invalid status choice.");
+     }
     }
+
+
+     @Override
+    public void updateTicket() {
+    // Display the available ticket IDs for selection
+      System.out.println("Available ticket IDs:");
+      List<Ticket> ticketList = ticketServiceImpl.getAllTickets();
+      for (Ticket ticket : ticketList) {
+           System.out.println(ticket.getTicketId());
+    }
+
+    // Prompt the user to enter the ticket ID to be updated
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Enter the ticket ID to update: ");
+    String ticketId = scanner.nextLine();
+
+    // Find the ticket in the ticketList based on the provided ticket ID
+    Ticket selectedTicket = null;
+    for (Ticket ticket : ticketList) {
+        if (ticket.getTicketId().equals(ticketId)) {
+            selectedTicket = ticket;
+            break;
+       }
+    }
+
+    // Check if the ticket is found
+    if (selectedTicket != null) {
+    // Prompt the user to enter updated ticket details
+         System.out.println("Enter updated customer name: ");
+         String customerName = scanner.nextLine();
+         System.out.println("Enter updated contact information: ");
+         String contactInfo = scanner.nextLine();
+         System.out.println("Enter updated ticket category: ");
+         String ticketCategory = scanner.nextLine();
+         System.out.println("Enter updated description: ");
+         String description = scanner.nextLine();
+         System.out.println("Enter updated status: ");
+         String status = scanner.nextLine();
+         System.out.println("Enter updated priority: ");
+         String priority = scanner.nextLine();
+
+         // Create an updated ticket object
+        Ticket updatedTicket = new Ticket(ticketId,customerName, contactInfo, ticketCategory, description, status, priority);
+
+         // Call the updateTicket method in the service layer to update the ticket
+         ticketServiceImpl.updateTicket(updatedTicket);
+         } else {
+              System.out.println("Ticket not found.");
+          }
+       }
     
-    @Override
-    public void deleteTicket() {
+       @Override
+        public void deleteTicket() {
+        // Display the available ticket IDs for selection
+        System.out.println("Available ticket IDs:");
+        List<Ticket> ticketList = ticketServiceImpl.getAllTickets();
+        for (Ticket ticket : ticketList) {
+             System.out.println(ticket.getTicketId());
+        }
+
+        // Prompt the user to enter the ticket ID to be deleted
+        System.out.println("Enter the ticket ID to delete: ");
+        String ticketId = scanner.nextLine();
+
+        // Find the index of the ticket in the ticketList based on the provided ticket ID
+        int ticketIndex = -1;
+        for (int i = 0; i < ticketList.size(); i++) {
+        if (ticketList.get(i).getTicketId().equals(ticketId)) {
+                 ticketIndex = i;
+                 break;
+              }
+           }
+
+        // Check if the ticket is found
+       if (ticketIndex != -1) {
+      // Confirm with the user before deleting the ticket
+            System.out.println("Are you sure you want to delete the ticket with ID " + ticketId + "? (Y/N)");
+            String confirmation = scanner.nextLine();
+
+             if (confirmation.equalsIgnoreCase("Y")) {
+              // Call the deleteTicket method in the service layer to delete the ticket
+                   ticketServiceImpl.deleteTicket(ticketIndex);
+             } else {
+           System.out.println("Ticket deletion canceled.");
+       }
+     } else {
+        System.out.println("Ticket not found.");
+     }
 
     }
 }
